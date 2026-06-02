@@ -51,7 +51,9 @@ resource "aws_instance" "this" {
 }
 
 resource "null_resource" "wait_for_ssm" {
-  depends_on = [aws_instance.this]
+  triggers = {
+    instance_id = aws_instance.this.id  # ajuste para o nome do seu recurso EC2
+  }
 
   provisioner "local-exec" {
   command = <<-EOT
@@ -72,4 +74,5 @@ resource "null_resource" "wait_for_ssm" {
     exit 1
   EOT
   }
+  depends_on = [aws_instance.this]
 }
