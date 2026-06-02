@@ -1,6 +1,4 @@
-variable "ssh_key_name" {
-  type = string
-}
+# modules/ec2/variables.tf
 
 variable "instance_type" {
   type    = string
@@ -10,8 +8,4 @@ variable "instance_type" {
 variable "ami" {
   type    = string
   default = "ami-0c02fb55956c7d316"
-}
-
-variable "ssh_private_key_path" {
-  type = string
 }

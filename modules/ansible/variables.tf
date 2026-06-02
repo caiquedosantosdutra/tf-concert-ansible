@@ -1,3 +1,5 @@
+# modules/ansible/variables.tf
+
 variable "aap_host" {
   type = string
 }
@@ -11,12 +13,9 @@ variable "aap_password" {
   sensitive = true
 }
 
-variable "target_ip" {
-  type = string
-}
-
-variable "ssh_private_key_path" {
-  type = string
+variable "instance_id" {
+  type        = string
+  description = "ID da EC2 vindo do módulo ec2"
 }
 
 variable "aap_project_id" {
