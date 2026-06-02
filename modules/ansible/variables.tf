@@ -10,10 +10,9 @@ variable "aap_password" {
   type      = string
   sensitive = true
 }
-
-variable "instance_id" {
+variable "instance_public_ip" {
   type        = string
-  description = "ID da EC2 vindo do módulo ec2"
+  description = "IP público da EC2"
 }
 
 variable "aap_job_template_id" {

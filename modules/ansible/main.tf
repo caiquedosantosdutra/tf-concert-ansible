@@ -14,15 +14,13 @@ resource "aap_inventory" "this" {
 }
 
 resource "aap_host" "this" {
-  name         = var.instance_id
+  name         = var.instance_public_ip
   inventory_id = aap_inventory.this.id
 
-
   variables = jsonencode({
-    ansible_connection     = "aws_ssm"
-    ansible_aws_ssm_region = "us-east-1"
-    ansible_host           = var.instance_id
-    ansible_user           = "ec2-user"
+    ansible_connection = "ssh"
+    ansible_host       = var.instance_public_ip
+    ansible_user       = "ec2-user"
   })
 }
 

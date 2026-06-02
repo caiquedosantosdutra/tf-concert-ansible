@@ -2,8 +2,15 @@
 
 resource "aws_security_group" "this" {
   name        = "ec2-aap-sg"
-  description = "Permite SSM"
-  vpc_id = var.vpc_id
+  description = "Permite SSH e SSM"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   egress {
     from_port   = 0
@@ -12,6 +19,7 @@ resource "aws_security_group" "this" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
 
 resource "aws_iam_role" "ec2_ssm" {
   name = "ec2-ssm-role"
@@ -42,37 +50,30 @@ resource "aws_instance" "this" {
   vpc_security_group_ids      = [aws_security_group.this.id]
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.ec2_ssm.name
-  subnet_id                   = var.subnet_id    # adicione essa linha
-
+  subnet_id                   = var.subnet_id
+  key_name                    = "caique-key"  # ← nome da key pair na AWS
 
   tags = {
     Name = "servidor-aap"
   }
 }
 
-resource "null_resource" "wait_for_ssm" {
+resource "null_resource" "wait_for_ssh" {
   triggers = {
-    instance_id = aws_instance.this.id  # ajuste para o nome do seu recurso EC2
+    instance_id = aws_instance.this.id
   }
 
   provisioner "local-exec" {
-  command = <<-EOT
-    for i in $(seq 1 20); do
-      STATUS=$(aws ssm describe-instance-information \
-        --filters "Key=InstanceIds,Values=${self.triggers.instance_id}" \
-        --region us-east-1 \
-        --query 'InstanceInformationList[0].PingStatus' \
-        --output text 2>/dev/null)
-      echo "Attempt $i: SSM status = $STATUS"
-      if [ "$STATUS" = "Online" ]; then
-        echo "SSM Agent is online!"
-        exit 0
-      fi
-      sleep 15
-    done
-    echo "Timeout waiting for SSM"
-    exit 1
-  EOT
+    command = <<-EOT
+      for i in $(seq 1 20); do
+        nc -z -w5 ${aws_instance.this.public_ip} 22 && echo "SSH disponivel!" && exit 0
+        echo "Tentativa $i: SSH ainda não disponível..."
+        sleep 15
+      done
+      echo "Timeout esperando SSH"
+      exit 1
+    EOT
   }
+
   depends_on = [aws_instance.this]
 }
