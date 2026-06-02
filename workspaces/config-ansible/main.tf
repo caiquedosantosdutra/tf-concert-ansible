@@ -19,9 +19,9 @@ provider "aap" {
 data "terraform_remote_state" "ec2" {
   backend = "remote"
   config = {
-    organization = "sua-org"
+    organization = "demo-ibm"
     workspaces = {
-      name = "infra-ec2"
+      name = "ec2"
     }
   }
 }
