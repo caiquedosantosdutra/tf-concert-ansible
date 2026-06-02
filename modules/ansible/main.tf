@@ -22,7 +22,6 @@ resource "aap_host" "this" {
     ansible_connection                = "winrm"
     ansible_host                      = var.instance_public_ip
     ansible_user                      = "Administrator"
-    ansible_password                  = var.windows_password
     ansible_winrm_transport           = "basic"
     ansible_winrm_port                = 5985
     ansible_winrm_server_cert_validation = "ignore"
@@ -31,6 +30,8 @@ resource "aap_host" "this" {
 
 resource "aap_job" "this" {
   job_template_id = var.aap_job_template_id
+  inventory_id    = aap_inventory.this.id
+
 
   extra_vars = jsonencode({
     target_host = var.instance_public_ip
