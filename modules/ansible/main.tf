@@ -1,5 +1,12 @@
 # modules/ansible/main.tf
-
+terraform {
+  required_providers {
+    aap = {
+      source  = "ansible/aap"
+      version = "~> 1.0"
+    }
+  }
+}
 resource "aap_credential" "ssm" {
   name            = "ec2-ssm"
   organization_id = 1
