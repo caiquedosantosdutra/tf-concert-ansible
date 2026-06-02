@@ -1,3 +1,5 @@
+# workspaces/config-ansible/main.tf
+
 terraform {
   required_providers {
     aap = {
@@ -17,18 +19,16 @@ provider "aap" {
 data "terraform_remote_state" "ec2" {
   backend = "remote"
   config = {
-    organization = "demo-ibm"
+    organization = "sua-org"
     workspaces = {
-      name = "ec2"
+      name = "infra-ec2"
     }
   }
 }
 
 module "ansible" {
   source              = "../../modules/ansible"
-  aap_host            = var.aap_host
-  aap_username        = var.aap_username
-  aap_password        = var.aap_password
   instance_public_ip  = data.terraform_remote_state.ec2.outputs.public_ip
+  windows_password    = var.windows_password
   aap_job_template_id = var.aap_job_template_id
 }

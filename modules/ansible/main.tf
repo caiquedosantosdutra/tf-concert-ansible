@@ -1,3 +1,5 @@
+# modules/ansible/main.tf
+
 terraform {
   required_providers {
     aap = {
@@ -8,9 +10,8 @@ terraform {
 }
 
 resource "aap_inventory" "this" {
-  name            = "servidores-tf"
+  name         = "servidores-tf"
   organization = 1
-
 }
 
 resource "aap_host" "this" {
@@ -18,14 +19,18 @@ resource "aap_host" "this" {
   inventory_id = aap_inventory.this.id
 
   variables = jsonencode({
-    ansible_connection = "ssh"
-    ansible_host       = var.instance_public_ip
-    ansible_user       = "ec2-user"
+    ansible_connection                = "winrm"
+    ansible_host                      = var.instance_public_ip
+    ansible_user                      = "Administrator"
+    ansible_password                  = var.windows_password
+    ansible_winrm_transport           = "basic"
+    ansible_winrm_port                = 5985
+    ansible_winrm_server_cert_validation = "ignore"
   })
 }
 
 resource "aap_job" "this" {
-  job_template_id = var.aap_job_template_id  # ID do job template já existente no AAP
+  job_template_id = var.aap_job_template_id
 
   extra_vars = jsonencode({
     target_host = var.instance_public_ip

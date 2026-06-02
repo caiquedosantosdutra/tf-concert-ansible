@@ -1,21 +1,17 @@
-variable "aap_host" {
-  type = string
-}
+# modules/ansible/variables.tf
 
-variable "aap_username" {
-  type = string
-}
-
-variable "aap_password" {
-  type      = string
-  sensitive = true
-}
 variable "instance_public_ip" {
   type        = string
-  description = "IP público da EC2"
+  description = "IP público da EC2 Windows"
+}
+
+variable "windows_password" {
+  type        = string
+  sensitive   = true
+  description = "Senha do Administrator da EC2 Windows"
 }
 
 variable "aap_job_template_id" {
   type        = number
-  description = "ID numérico do job template já existente no AAP"
+  description = "ID do job template no AAP"
 }
