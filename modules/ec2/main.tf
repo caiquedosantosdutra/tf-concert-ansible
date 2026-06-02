@@ -70,7 +70,7 @@ resource "aws_instance" "this" {
   key_name                    = var.key_name
 
   # Habilita WinRM via User Data
-  user_data = <<EOF
+user_data = <<EOF
 <powershell>
 # Configura WinRM
 winrm quickconfig -q
@@ -83,6 +83,7 @@ netsh advfirewall firewall add rule name="WinRM HTTP" protocol=TCP dir=in localp
 netsh advfirewall firewall add rule name="WinRM HTTPS" protocol=TCP dir=in localport=5986 action=allow
 
 # Define senha do Administrator
+net user Administrator ${var.windows_password}
 $password = ConvertTo-SecureString "${var.windows_password}" -AsPlainText -Force
 Set-LocalUser -Name "Administrator" -Password $password
 
