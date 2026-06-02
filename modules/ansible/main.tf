@@ -11,24 +11,6 @@ terraform {
     }
   }
 }
-provider "restapi" {
-  uri                  = var.aap_host
-  username             = var.aap_username
-  password             = var.aap_password
-  insecure             = true
-  write_returns_object = true
-}
-
-# Atualiza o job template com o inventário criado
-resource "restapi_object" "update_job_template" {
-  path         = "/api/controller/v2/job_templates/${var.aap_job_template_id}/"
-  method       = "PATCH"
-  data         = jsonencode({
-    inventory = aap_inventory.this.id
-  })
-
-  depends_on = [aap_inventory.this]
-}
 
 resource "aap_inventory" "this" {
   name         = "servidores-tf"
