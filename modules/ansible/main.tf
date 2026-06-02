@@ -28,7 +28,7 @@ resource "aap_job" "this" {
   job_template_id = var.aap_job_template_id  # ID do job template já existente no AAP
 
   extra_vars = jsonencode({
-    target_host = var.instance_id
+    target_host = var.instance_public_ip
   })
 
   depends_on = [aap_host.this]
