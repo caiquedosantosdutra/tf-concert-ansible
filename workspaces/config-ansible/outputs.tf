@@ -1,8 +1,8 @@
-# modules/ansible/outputs.tf
+# workspaces/config-ansible/outputs.tf
 output "job_url" {
-  value = aap_job.this.url
+  value = module.ansible.job_url
 }
 
 output "job_status" {
-  value = aap_job.this.status
+  value = module.ansible.job_status
 }

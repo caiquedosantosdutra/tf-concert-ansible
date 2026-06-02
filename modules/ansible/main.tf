@@ -17,6 +17,7 @@ resource "aap_host" "this" {
   name         = var.instance_id
   inventory_id = aap_inventory.this.id
 
+
   variables = jsonencode({
     ansible_connection     = "aws_ssm"
     ansible_aws_ssm_region = "us-east-1"
