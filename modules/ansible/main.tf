@@ -1,4 +1,3 @@
-# modules/ansible/main.tf
 terraform {
   required_providers {
     aap = {
@@ -7,20 +6,11 @@ terraform {
     }
   }
 }
-resource "aap_credential" "ssm" {
-  name            = "ec2-ssm"
-  organization_id = 1
-  credential_type = 1
-
-  inputs = jsonencode({
-    username      = "ec2-user"
-    become_method = "sudo"
-  })
-}
 
 resource "aap_inventory" "this" {
-  name         = "servidores-tf"
-  organization = "Default"
+  name            = "ec2-ip"
+  organization = 1
+
 }
 
 resource "aap_host" "this" {
@@ -35,17 +25,8 @@ resource "aap_host" "this" {
   })
 }
 
-resource "aap_job_template" "this" {
-  name            = "configurar-ec2"
-  organization_id = 1
-  inventory_id    = aap_inventory.this.id
-  project_id      = var.aap_project_id
-  playbook        = var.playbook
-  credential_ids  = [aap_credential.ssm.id]
-}
-
 resource "aap_job" "this" {
-  job_template_id = aap_job_template.this.id
+  job_template_id = var.aap_job_template_id  # ID do job template já existente no AAP
 
   extra_vars = jsonencode({
     target_host = var.instance_id

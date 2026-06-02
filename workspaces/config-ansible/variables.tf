@@ -11,11 +11,5 @@ variable "aap_password" {
   sensitive = true
 }
 
-variable "aap_project_id" {
-  type = number
-}
 
-variable "playbook" {
-  type    = string
-  default = "site.yml"
-}
+variable "aap_job_template_id" {}
