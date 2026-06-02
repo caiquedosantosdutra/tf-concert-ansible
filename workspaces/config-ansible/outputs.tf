@@ -1,7 +1,8 @@
-output "job_id" {
-  value = module.ansible.job_id
+# modules/ansible/outputs.tf
+output "job_url" {
+  value = aap_job.this.url
 }
 
 output "job_status" {
-  value = module.ansible.job_status
+  value = aap_job.this.status
 }
