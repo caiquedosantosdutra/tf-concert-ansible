@@ -54,10 +54,22 @@ resource "null_resource" "wait_for_ssm" {
   depends_on = [aws_instance.this]
 
   provisioner "local-exec" {
-    command = <<EOF
-      aws ssm wait instance-information-available \
-        --filters "Key=InstanceIds,Values=${aws_instance.this.id}" \
-        --region us-east-1
-    EOF
+  command = <<-EOT
+    for i in $(seq 1 20); do
+      STATUS=$(aws ssm describe-instance-information \
+        --filters "Key=InstanceIds,Values=${self.triggers.instance_id}" \
+        --region us-east-1 \
+        --query 'InstanceInformationList[0].PingStatus' \
+        --output text 2>/dev/null)
+      echo "Attempt $i: SSM status = $STATUS"
+      if [ "$STATUS" = "Online" ]; then
+        echo "SSM Agent is online!"
+        exit 0
+      fi
+      sleep 15
+    done
+    echo "Timeout waiting for SSM"
+    exit 1
+  EOT
   }
 }
