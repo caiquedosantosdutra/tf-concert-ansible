@@ -8,7 +8,7 @@ variable "instance_type" {
 variable "ami" {
   type        = string
   description = "AMI Windows Server 2022"
-  default     = "ami-0f9c44e98edf38a2b"  # Windows Server 2022 us-east-1
+  default     = "ami-0909cee4864578472"  # Windows Server 2022 us-east-1
 }
 
 variable "vpc_id" {
