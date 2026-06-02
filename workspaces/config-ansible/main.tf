@@ -19,7 +19,7 @@ data "terraform_remote_state" "ec2" {
   config = {
     organization = "demo-ibm"
     workspaces = {
-      name = "infra-ec2"
+      name = "ec2"
     }
   }
 }
