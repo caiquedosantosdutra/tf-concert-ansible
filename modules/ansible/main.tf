@@ -8,7 +8,7 @@ terraform {
 }
 
 resource "aap_inventory" "this" {
-  name            = "ec2-ip"
+  name            = "servidores-tf"
   organization = 1
 
 }
