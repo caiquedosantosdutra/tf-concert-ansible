@@ -66,7 +66,7 @@ resource "null_resource" "wait_for_ssh" {
   provisioner "local-exec" {
     command = <<-EOT
       for i in $(seq 1 20); do
-        nc -z -w5 ${aws_instance.this.public_ip} 22 && echo "SSH disponivel!" && exit 0
+        (bash -c "echo > /dev/tcp/${aws_instance.this.public_ip}/22") 2>/dev/null && echo "SSH disponivel!" && exit 0
         echo "Tentativa $i: SSH ainda não disponível..."
         sleep 15
       done
