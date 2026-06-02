@@ -27,7 +27,13 @@ resource "aap_host" "this" {
     ansible_winrm_server_cert_validation = "ignore"
   })
 }
-
+resource "aap_job_template" "this" {
+  name            = "configurar-windows"
+  organization_id = 1
+  inventory_id    = aap_inventory.this.id
+  project_id      = var.aap_project_id
+  playbook        = var.playbook
+}
 resource "aap_job" "this" {
   job_template_id = var.aap_job_template_id
   inventory_id    = aap_inventory.this.id
