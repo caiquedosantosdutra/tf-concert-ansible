@@ -70,10 +70,13 @@ resource "aws_instance" "this" {
   key_name                    = var.key_name
 
   # Habilita WinRM via User Data
-user_data = <<EOF
+  user_data = <<EOF
 <powershell>
+# Aguarda WinRM iniciar
+Start-Sleep -Seconds 10
+
 # Configura WinRM
-winrm quickconfig -q
+winrm quickconfig -q -force
 winrm set winrm/config/service '@{AllowUnencrypted="true"}'
 winrm set winrm/config/service/auth '@{Basic="true"}'
 winrm set winrm/config/listener?Address=*+Transport=HTTP '@{Port="5985"}'
@@ -82,10 +85,13 @@ winrm set winrm/config/listener?Address=*+Transport=HTTP '@{Port="5985"}'
 netsh advfirewall firewall add rule name="WinRM HTTP" protocol=TCP dir=in localport=5985 action=allow
 netsh advfirewall firewall add rule name="WinRM HTTPS" protocol=TCP dir=in localport=5986 action=allow
 
-
-# Habilita conta Administrator
+# Define e habilita Administrator
+net user Administrator ${var.windows_password}
 Enable-LocalUser -Name "Administrator"
-</powershell>
+
+# Reinicia WinRM para aplicar configurações
+Restart-Service WinRM
+</poershell>
 EOF
 
   tags = {
