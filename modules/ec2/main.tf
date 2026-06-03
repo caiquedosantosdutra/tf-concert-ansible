@@ -82,9 +82,6 @@ winrm set winrm/config/listener?Address=*+Transport=HTTP '@{Port="5985"}'
 netsh advfirewall firewall add rule name="WinRM HTTP" protocol=TCP dir=in localport=5985 action=allow
 netsh advfirewall firewall add rule name="WinRM HTTPS" protocol=TCP dir=in localport=5986 action=allow
 
-# Define senha do Administrator
-net user Administrator ${var.windows_password}
-Set-LocalUser -Name "Administrator" -Password $password
 
 # Habilita conta Administrator
 Enable-LocalUser -Name "Administrator"
