@@ -84,7 +84,6 @@ netsh advfirewall firewall add rule name="WinRM HTTPS" protocol=TCP dir=in local
 
 # Define senha do Administrator
 net user Administrator ${var.windows_password}
-$password = ConvertTo-SecureString "${var.windows_password}" -AsPlainText -Force
 Set-LocalUser -Name "Administrator" -Password $password
 
 # Habilita conta Administrator
