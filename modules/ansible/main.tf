@@ -43,9 +43,11 @@ resource "aap_host" "this" {
   })
 }
 
-# Atualiza o job template com o inventário via API
 resource "restapi_object" "update_job_template" {
-  path = "/api/controller/v2/job_templates/${var.aap_job_template_id}/"
+  path         = "/api/controller/v2/job_templates/${var.aap_job_template_id}/"
+  create_method = "PATCH"
+  update_method = "PATCH"
+  destroy_method = "PATCH"
   data = jsonencode({
     inventory = tonumber(aap_inventory.this.id)
   })
