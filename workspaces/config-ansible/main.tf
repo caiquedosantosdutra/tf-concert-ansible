@@ -31,4 +31,7 @@ module "ansible" {
   instance_public_ip  = data.terraform_remote_state.ec2.outputs.public_ip
   windows_password    = var.windows_password
   aap_job_template_id = var.aap_job_template_id
+  aap_host            = var.aap_host
+  aap_username        = var.aap_username
+  aap_password        = var.aap_password
 }
